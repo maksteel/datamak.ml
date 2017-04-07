@@ -151,8 +151,8 @@ $georgia: Georgia, serif;
 
 .site-avatar {
   float: left;
-  width: 85px;
-  height: 85px;
+  width: 100px;
+  height: 100px;
   margin-right: 15px;
 
   @include mobile {
@@ -177,7 +177,7 @@ $georgia: Georgia, serif;
 }
 
 .site-name {
-  margin: 0;
+  margin-bottom: 7px;
   color: $darkGray;
   cursor: pointer;
   font-family: $helveticaNeue;

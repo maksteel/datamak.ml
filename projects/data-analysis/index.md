@@ -3,11 +3,11 @@ layout: default
 
 title: Data Analysis
 
-introduction: stories of data analysis
+introduction: This page contains the list of problems that are solved using R.
 
 ---
 
 ## Case Studies
-- [Bank Loan](#story-1){:target="_self"}
-- [Fraud Detection](#story-2){:target="_self"}
+- [Predicting the age of abalone](predict-age-abalone)
+- [Gender pay gap](gender-pay-gap)
 
