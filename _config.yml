@@ -1,0 +1,42 @@
+name: Manish Kukreja
+baseurl: ""
+slideshows: ""
+
+# theme
+themecolor: "rgba(0,0,0,0.87)"
+
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  enable_coderay: false
+  hard_wrap: true
+
+# Where things are
+source:       .
+destination:  ./_site
+layouts_dir:  ./theme/_layouts
+includes_dir: ./theme/_includes
+modules_dir: projects
+moduleheading: Projects
+sass:
+    sass_dir: ./theme/_sass
+
+# keep the built site tidy, only include files we need for publishing
+exclude: ["node_modules", "Gemfile", "Gruntfile.js", "package.json", "README.md", "*.sublime-project", "*.sublime-workspace"]
+
+# Includes an icon in the footer for each username you enter
+footer-links:
+  dribbble:
+  email: kukreja.m@gmail.com
+  facebook:
+  flickr:
+  github: maksteel/
+  instagram:
+  linkedin: kukrejamanish
+  pinterest:
+  rss: # just type anything here for a working RSS icon
+  twitter: 
+  stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
+  youtube: # channel/<your_long_string> or user/<user-name>
+  googleplus: # anything in your profile username that comes after plus.google.com/

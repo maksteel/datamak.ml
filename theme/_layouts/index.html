@@ -1,0 +1,50 @@
+---
+---
+
+{% include layout/head.html %}
+{% include layout/main-navigation.html %}
+
+<div class="page-wrapper">
+
+<!-- display page content -->
+<div class="container">
+
+	<!-- title and description -->
+	{% if page.title %}
+		<section class="page-header">
+        <div class="wrapper-masthead">
+            <div class="container2">
+                <header class="masthead clearfix">
+                    <a href="{{ site.baseurl }}" class="site-avatar"><img width="84px" height="84px" src="{{ site.baseurl }}/theme/assets/images/logo.jpg"></a>
+
+                    <div class="site-info">
+                        <h1 class="site-name"><a href="{{ site.baseurl }}">{{ page.title }}</a></h1>
+                        <p class="site-description">{{ page.sub-title }}</p>
+                        {% include layout/contact.html %}
+                    </div>
+
+                    <!--nav>
+                    <a href="{{ site.baseurl }}">Blog</a>
+                    <a href="{{ site.baseurl }}">About</a>
+                    <a href="{{ site.baseurl }}">Resume</a>
+                    </nav -->
+                </header>
+
+            </div>
+        </div>
+			<p>{{ page.introduction | markdownify }}</p>
+		</section>
+	{% endif %}
+
+	<!-- page content -->
+	<section class="page-content">
+		{{ content }}
+	</section>
+
+
+
+</div><!-- .container -->
+
+</div><!-- .page-wrapper -->
+
+{% include layout/page-foot.html %}

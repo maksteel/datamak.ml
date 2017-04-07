@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+	<head>
+        <script>
+        function toggleDiv(id) {
+            var div = document.getElementById(id);
+            div.style.display = div.style.display == "none" ? "block" : "none";
+        }
+        function displayVideo(id){
+            var div = document.getElementById(id);
+            div.style.display =  "block" ;
+        }
+
+        function stopVideo(id,id2){
+            var ifrm = document.getElementById(id2);
+            ifrm.src = "";
+            var div = document.getElementById(id);
+            div.style.display =  "none" ;
+        }
+        </script>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        {% include config/styles.html %}
+
+	</head>
+
+	<body>

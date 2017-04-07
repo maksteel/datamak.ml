@@ -1,0 +1,10 @@
+ - name: Data Analysis
+   slug: data-analysis
+   status:
+     weeklySchedule: started
+     assessmentGuide: started
+     teachingGuide: not-started
+     teachingResources: not-started
+     assessmentResources: not-started
+  
+
