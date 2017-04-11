@@ -1,7 +1,4 @@
 ---
-layout: default
-
+layout: analysis
+comments: true
 ---
-
-{% include projects/data-analysis/gender-pay-gap.html %}
-

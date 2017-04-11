@@ -1,0 +1,49 @@
+---
+---
+
+{% include layout/head.html %}
+{% include layout/main-navigation.html %}
+
+<div class="page-wrapper">
+
+<!-- display page content -->
+<div class="container">
+
+	<!-- title and description -->
+	{% if page.title %}
+		<section class="page-header">
+			<h1>{{ page.title }}</h1>
+			<p>{{ page.introduction | markdownify }}</p>
+		</section>
+	{% endif %}
+
+	<!-- page content -->
+	<section class="page-content">
+    <script type="text/javascript">
+      function iframeLoaded() {
+          var iFrameID = document.getElementById("gender-pay-gap");
+          if(iFrameID) {
+                iFrameID.height = "";
+                iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+          }   
+      }
+    </script>
+	<div>
+		<img src="{{ page.name | replace: '.md', '-logo.png' }}"/ width="100%" style="border-radius: 5px;">
+		<iframe id="gender-pay-gap" name="gender-pay-gap" onload="iframeLoaded()" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="gender-pay-gap" width="100%"  src="{{ page.name | replace: '.md', '-analysis.html' }}"  horizontalscrolling="no" verticalscrolling="no"> </iframe>
+	</div>
+	</section>
+
+	{% include layout/disqus.html %}
+
+	{% include layout/footer.html %}
+
+</div><!-- .container -->
+
+
+
+
+
+</div><!-- .page-wrapper -->
+
+{% include layout/page-foot.html %}
