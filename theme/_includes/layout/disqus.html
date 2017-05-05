@@ -4,13 +4,13 @@
 </section>
 <script>
 var disqus_config = function () {
-this.page.url = "http://dataman.ml{{ page.url }}"; // <--- use canonical URL
+this.page.url = "{{ site.hosturl }}{{ page.url }}"; // <--- use canonical URL
 this.page.identifier = "{{ page.id }}";
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
 
-s.src = '//dataman-ml.disqus.com/embed.js'; // <--- use Disqus shortname
+s.src = '//{{ site.disqusshortname }}.disqus.com/embed.js'; // <--- use Disqus shortname
 
 s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);

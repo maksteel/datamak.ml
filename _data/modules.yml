@@ -6,5 +6,7 @@
      teachingGuide: not-started
      teachingResources: not-started
      assessmentResources: not-started
+ - name: ABCD-SE
+   slug: abcd-se
   
 
