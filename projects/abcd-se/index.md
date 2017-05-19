@@ -5,7 +5,7 @@ title: ABCD-SE
 
 introduction: |
 
-  This page hosts my masters dissertation. 
+  This page hosts my masters dissertation and talks related to it. 
   
   This dissertation explored model search, model scoring and model evaluation of an artificial intelligent (AI) system. This AI performed data analysis through compositional kernel search and was called Automatic Bayesian Covariance Discovery (ABCD). 
   
@@ -14,5 +14,7 @@ introduction: |
   Thus, this dissertation was titled as Automatic Bayesian Covariance Discovery with Stable Extrapolation or ABCD-SE for short.
 
 ---
-[Read More](./abcd_se/index.html?page=1)
+- [Dissertation](./abcd_se/index.html?page=1)
+
+- [Talk at Qrious NZ](https://tiny.cc/dataman)
 
