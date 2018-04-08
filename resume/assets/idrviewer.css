@@ -29,6 +29,7 @@
 }
 .layout-presentation .page.current {
     visibility: visible !important;
+    z-index: 1; /* Fix selection in IE/Edge */
 }
 
 /* Continuous Layout */
@@ -39,6 +40,19 @@
     margin: 0 auto 0;
 }
 
+/* Continuous_Horizontal Layout */
+#idrviewer.layout-continuous_horizontal {
+    overflow: hidden;
+
+    /*-webkit-scroll-snap-type: mandatory;*/
+    /*-webkit-scroll-snap-points-x: repeat(100%);*/
+}
+
+.layout-continuous_horizontal .page {
+    display: inline-block;
+    transform: translate3d(0, 0, 0);
+}
+
 /* Magazine Layout */
 .layout-magazine .page {
     visibility: hidden;
@@ -46,6 +60,7 @@
 }
 .layout-magazine .page.current {
     visibility: visible !important;
+    z-index: 1; /* Fix selection in IE/Edge */
 }
 
 
@@ -82,7 +97,8 @@
     transition: visibility 0.5s, opacity 0.5s;
     opacity: 1;
 }
-.layout-presentation.transition-fade .page.prev, .transition-fade .page.next {
+.layout-presentation.transition-fade .page.prev,
+.layout-presentation.transition-fade .page.next {
     opacity: 0;
     z-index: 2;
 }
@@ -108,7 +124,8 @@
     -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
 }
-.layout-presentation.transition-flip .next, .transition-flip .prev {
+.layout-presentation.transition-flip .next,
+.layout-presentation.transition-flip .prev {
     visibility: visible;
 }
 

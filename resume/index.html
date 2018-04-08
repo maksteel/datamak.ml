@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- v1.4.0 -->
+<!-- v1.4.1 -->
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,8 +16,7 @@
 (function() {
     "use strict";
     var Button = {},
-        pgCount,
-        curPg;
+        pageLabels = [];
 
     /**
      * Shorthand helper function to getElementById
@@ -81,16 +80,25 @@
             bookmarkPanel,
             searchPanel,
             isSearchLoaded,
-            searchInput;
+            searchInput,
+            thumbnailScrollPt = 0,
+            bookmarkScrollPt = 0,
+            searchScrollPt = 0,
+            curPg,
+            pgCount;
 
         /**
          * Performs the setup for the sidebar
+         * @param initialPage Current page
+         * @param pageCount Page count
          * @param bounds Page bounds array
          * @param thumbnailType Image type used for thumbnails
          * @param bookmarks Object containing any bookmarks
          */
-        Sidebar.setup = function (bounds, thumbnailType, bookmarks) {
+        Sidebar.setup = function (initialPage, pageCount, bounds, thumbnailType, bookmarks) {
 
+            curPg = initialPage;
+            pgCount = pageCount;
             Button.outlines = d('btnOutlines');
             Button.thumbnails = d('btnThumbnails');
             Button.search = d('btnSearch');
@@ -128,6 +136,9 @@
             if (bookmarks.length > 0) {
                 Sidebar.setBookmarks(bookmarks);
             }
+            bookmarkScrollPt = bookmarkPanel.scrollTop;
+            searchScrollPt = searchPanel.scrollTop;
+            thumbnailBar.scrollTop = thumbnailScrollPt;
         };
 
         Sidebar.openSidebar = function() {
@@ -149,10 +160,17 @@
          * Display the thumbnail panel in the sidebar
          */
         Sidebar.switchToThumbnails = function () {
+            if (bookmarkPanel.className == "visible") {
+                bookmarkScrollPt = thumbnailBar.scrollTop;
+            }
+            if (searchPanel.className == "visible") {
+                searchScrollPt = thumbnailBar.scrollTop;
+            }
+
             thumbnailPanel.className = "visible";
             bookmarkPanel.className = "hidden";
             searchPanel.className = "hidden";
-            Sidebar.scrollToPage(curPg);
+            updateThumbnailPanelToCurrentPage();
             Button.thumbnails.className = 'disabled btn';
             Button.outlines.className = 'btn';
             Button.search.className = 'btn';
@@ -162,15 +180,30 @@
          * Display the bookmarks panel in the sidebar
          */
         Sidebar.switchToBookmarks = function () {
+            if (searchPanel.className == "visible") {
+                searchScrollPt = thumbnailBar.scrollTop;
+            }
+            if (thumbnailPanel.className == "visible") {
+                thumbnailScrollPt = thumbnailBar.scrollTop;
+            }
+
             thumbnailPanel.className = "hidden";
             bookmarkPanel.className = "visible";
             searchPanel.className = "hidden";
             Button.thumbnails.className = 'btn';
             Button.outlines.className = 'disabled btn';
             Button.search.className = 'btn';
+            thumbnailBar.scrollTop = bookmarkScrollPt;
         };
 
         Sidebar.switchToSearch = function() {
+            if (bookmarkPanel.className == "visible") {
+                bookmarkScrollPt = thumbnailBar.scrollTop;
+            }
+            if (thumbnailPanel.className == "visible") {
+                thumbnailScrollPt = thumbnailBar.scrollTop;
+            }
+
             thumbnailPanel.className = "hidden";
             bookmarkPanel.className = "hidden";
             searchPanel.className = "visible";
@@ -194,6 +227,7 @@
                 IDRViewer.loadSearch(loadListener, progressListener);
             }
             searchInput.focus();
+            thumbnailBar.scrollTop = searchScrollPt;
         };
 
         /**
@@ -262,11 +296,18 @@
         /**
          * Scrolls the thumbnail bar to a specific page and adds currentPageThumbnail class.
          * @param page Page to scroll to
-         * @param page2 Optional second page
          */
-        Sidebar.scrollToPage = function (page, page2) {
-            var curThumb = thumbnailPanel.children[page - 1];
-            if (curThumb.className != "thumbnail currentPageThumbnail") {
+        Sidebar.handlePageChange = function (page) {
+            curPg = page;
+            if (thumbnailPanel.className === "visible") {
+                updateThumbnailPanelToCurrentPage();
+            }
+            scrollSidebar = true;
+        };
+
+        var updateThumbnailPanelToCurrentPage = function() {
+            var curThumb = thumbnailPanel.children[curPg - 1];
+            if (curThumb.className !== "thumbnail currentPageThumbnail") {
 
                 for (var i = 0; i < pgCount; i++) {
                     thumbnailPanel.children[i].className = "thumbnail";
@@ -278,10 +319,6 @@
                     thumbnailBar.scrollTop = thumbnailBar.scrollTop + curThumb.getBoundingClientRect().top - d('leftContent').getBoundingClientRect().top;
                 }
             }
-            if (typeof page2 != 'undefined') {
-                thumbnailPanel.children[page2 - 1].className = "thumbnail currentPageThumbnail";
-            }
-            scrollSidebar = true;
         };
 
         Sidebar.setBookmarks = function (bookmarks) {
@@ -314,7 +351,7 @@
         return Sidebar;
     })();
 
-    var populateGoBtn = function () {
+    var populateGoBtn = function (initialPage, pgCount) {
         Button.go.className = "";
         Button.go.innerHTML = "";
         for (var i = 1; i <= pgCount; i++) {
@@ -323,7 +360,7 @@
             opt.innerHTML = pageLabels.length ? pageLabels[i - 1] : String(i);
             Button.go.appendChild(opt);
         }
-        Button.go.selectedIndex = curPg - 1;
+        Button.go.selectedIndex = initialPage - 1;
     };
 
     var handleGoBtn = function () {
@@ -346,7 +383,7 @@
 
     var handlePageChange = function (data) {
         d('pgCount').innerHTML = getPageString(data.page, data.pagecount);
-        Sidebar.scrollToPage(data.page);
+        Sidebar.handlePageChange(data.page);
         Button.go.selectedIndex = data.page - 1;
 
         Button.prev.className = data.isFirstPage ? 'disabled btn' : 'btn';
@@ -378,7 +415,7 @@
         this.blur();
     };
 
-    var setupLayoutSwitching = function (layout, availableLayouts, isMobile) {
+    var setupLayoutSwitching = function (pgCount, layout, availableLayouts, isMobile) {
 
         if (!isMobile) {
 
@@ -424,8 +461,6 @@
             Button.fullscreen.className = "btn closed";
         }
     };
-
-    var pageLabels = [];
 
     function getPageString(page, pageCount) {
         var result = "/ " + pageCount;
@@ -528,14 +563,12 @@
 
         // Misc setup
         document.title = data.title ? data.title : data.fileName;
-        curPg = data.page;
         updateSelectionButtons(data.selectMode);
         pageLabels = data.pageLabels;
-        pgCount = data.pagecount;
 
-        populateGoBtn();
+        populateGoBtn(data.page, data.pagecount);
 
-        Sidebar.setup(data.bounds, data.thumbnailType, data.bookmarks);
+        Sidebar.setup(data.page, data.pagecount, data.bounds, data.thumbnailType, data.bookmarks);
         d('pgCount').innerHTML = getPageString(data.page, data.pagecount);
 
         if (IDRViewer.isFullscreenEnabled()) {
@@ -547,7 +580,7 @@
             Button.fullscreen.parentNode.removeChild(Button.fullscreen);
         }
 
-        setupLayoutSwitching(data.layout, data.availableLayouts, data.isMobile);
+        setupLayoutSwitching(data.pagecount, data.layout, data.availableLayouts, data.isMobile);
         Button.zoom.value = IDRViewer.ZOOM_AUTO;
 
         // Add event listeners
@@ -638,15 +671,15 @@
     #goBtn, #zoomBtn, #viewBtn {
         height: 25px;
     }
-	#goBtn {
-		width: 55px;
-	}
+    #goBtn {
+        width: 55px;
+    }
     #viewBtn {
         width: 105px;
     }
-	#zoomBtn {
-		width: 95px;
-	}
+    #zoomBtn {
+        width: 95px;
+    }
     .thumbnail {
         cursor: pointer;
         display: block;
@@ -786,12 +819,12 @@
         opacity: 0.4;
     }
 
-	.light-theme #goBtn,
-	.light-theme #zoomBtn,
-	.light-theme #viewBtn {
+    .light-theme #goBtn,
+    .light-theme #zoomBtn,
+    .light-theme #viewBtn {
         background-color: #9aa8b6;
         color: white;
-		border: 1px solid #7b8793;
+        border: 1px solid #7b8793;
     }
 
     .dark-theme #idrviewer {
@@ -817,12 +850,12 @@
         opacity: 0.2;
     }
 
-	.dark-theme #goBtn,
-	.dark-theme #zoomBtn,
-	.dark-theme #viewBtn {
+    .dark-theme #goBtn,
+    .dark-theme #zoomBtn,
+    .dark-theme #viewBtn {
         background-color: #656565;
         color: white;
-		border: 1px solid #000;
+        border: 1px solid #000;
     }
 
     #idrviewer {
