@@ -15,6 +15,6 @@ introduction: |
 
 ---
 - [Dissertation](./abcd_se/index.html?page=1)
-
-- [Talk at Qrious NZ](https://tiny.cc/dataman)
+- [Talk at Qrious NZ on May 19, 2017](https://tiny.cc/qrious-may17)
+- [Talk at DataGiri Meetup on Apr 14, 2018](https://tiny.cc/datagiri-apr18)
 
