@@ -1,1 +1,1 @@
-IDRViewer.config = {"pagecount":2,"title":"","author":"","fileName":"Manish_Kukreja_Resume.pdf","bounds":[[909,1286],[909,1286]],"bookmarks":[],"thumbnailType":"jpg","pageType":"html","pageLabels":[]};
+IDRViewer.config = {"pagecount":2,"title":"","author":"","fileName":"Resume.pdf","bounds":[[909,1286],[909,1286]],"bookmarks":[],"thumbnailType":"jpg","pageType":"html","pageLabels":[]};

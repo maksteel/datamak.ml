@@ -1,4 +1,4 @@
-/* IDRViewer - v1.1.0 */
+/* IDRViewer - v1.8.2 */
 
 /* Layout Styles */
 .page {
@@ -9,9 +9,8 @@
 
 .page-inner {
     -webkit-transform-origin: top left;
-    -moz-transform-origin: top left;
-    -o-transform-origin: top left;
     -ms-transform-origin: top left;
+    transform-origin: top left;
 }
 
 #idrviewer {
@@ -20,6 +19,29 @@
     margin: 0;
     padding: 0;
     -webkit-overflow-scrolling: touch;
+}
+
+#overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+}
+
+#overlay.panning {
+    visibility: visible;
+    cursor: all-scroll;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+#overlay.panning.mousedown {
+    cursor: all-scroll;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
 }
 
 /* Presentation Layout */
