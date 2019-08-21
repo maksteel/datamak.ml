@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- v1.5.1 -->
+<!-- v1.7.0 -->
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,10 +12,83 @@
 <script src="assets/idrviewer.querystring-navigation.js"></script>
 <script src="assets/idrviewer.fullscreen.js"></script>
 <script src="assets/idrviewer.search.js"></script>
-<!--*-->
+<script src="assets/idrviewer.annotations.js"></script>
 <script type="text/javascript">
 (function() {
     "use strict";
+    var LanguageHelper = (function() {
+        var translationsList = {
+            "ja":{"control.sidebar": "サイドバー","control.theme-toggle": "テーマ切換","control.prev": "前のページ",
+                "control.next": "次のページ","control.select": "選択","control.move": "パン","control.zoom-out": "縮小",
+                "control.zoom-in": "拡大","control.actual-size": "実際のサイズ","control.fit-width": "幅に合わせる",
+                "control.fit-height": "高さに合わせる","control.fit-page": "ページに合わせる","control.auto": "自動",
+                "control.fullscreen": "フルスクリーン","control.thumbnails": "サムネイル","control.outlines": "ブックマーク",
+                "control.presentation": "プレゼンテーション","control.magazine": "マガジン","control.continuous": "スクロール",
+                "control.search": "検索","control.page": "ページ","search.search": "検索","search.match-case": " 大文字・小文字を区別",
+                "search.limit-results-1": " 結果を1ページ１つに制限する","search.limit-results-500": "最初の500件が表示されます。",
+                "search.results-count": " 件","search.unavailable": "検索できません","search.loading": "ローディング"},
+            "fr":{"control.sidebar": "Barre latérale","control.theme-toggle": "Basculer entre les thèmes","control.prev": "Page précédente",
+                "control.next": "Page suivante","control.select": "Sélectionner","control.move": "Déplacer","control.zoom-out": "Zoom arrière",
+                "control.zoom-in": "Zoom avant","control.actual-size": "Taille réelle","control.fit-width": "Pleine largeur",
+                "control.fit-height": "Pleine hauteur","control.fit-page": "Page entière","control.auto": "Automatique",
+                "control.fullscreen": "Plein écran","control.thumbnails": "Vignettes","control.outlines": "Signets",
+                "control.presentation": "Présentation","control.magazine": "Magazine","control.continuous": "En continu",
+                "control.search": "Recherche","control.page": "Page","search.search": "Rechercher","search.match-case": " Respecter la casse",
+                "search.limit-results-1": " Limiter les résultats à 1 par page","search.limit-results-500": "Limitée aux 500 premiers résultats",
+                "search.results-count": " résultats","search.unavailable": "Recherche non accessible","search.loading": "Chargement en cours"},
+            "de":{"control.sidebar": "Seitenleiste","control.theme-toggle": "Darstellung wechseln","control.prev": "Vorherige Seite",
+                "control.next": "Nächste Seite","control.select": "Auswählen","control.move": "Bewegen","control.zoom-out": "Zoom Out",
+                "control.zoom-in": "Zoom In","control.actual-size": "Tatsächliche Grösse","control.fit-width": "Breite füllend",
+                "control.fit-height": "Höhe füllend","control.fit-page": "Seite füllend","control.auto": "Automatisch",
+                "control.fullscreen": "Ganzer Bildschirm","control.thumbnails": "Mini-Ansichten","control.outlines": "Lesezeichen",
+                "control.presentation": "Präsentationsdarstellung","control.magazine": "Magazindarstellung",
+                "control.continuous": "Fortlaufende Darstellung","control.search": "Suchen","control.page": "Seite","search.search": "Suchen",
+                "search.match-case": "Gross-/Kleinschreibung beachten","search.limit-results-1": "Auf 1 Resultat pro Seite begrenzen",
+                "search.limit-results-500": "Auf die ersten 500 Resultate begrenzen.","search.results-count": " Resultat(e)",
+                "search.unavailable": "Suche nicht verfügbar.","search.loading": "Lade"},
+            "hi":{"control.sidebar": "साइडबार","control.theme-toggle": "विषय टॉगल","control.prev": "पिछला पृष्ठ",
+                "control.next": "अगला पृष्ठ","control.select": "चुनते हैं","control.move": "पान","control.zoom-out": "छोटा करें",
+                "control.zoom-in": "बड़ा करें","control.actual-size": "वास्तविक आकार","control.fit-width": "चौड़ाई पर फ़िट",
+                "control.fit-height": "ठीक ऊंचाई","control.fit-page": "फिट पेज","control.auto": "स्वचालित",
+                "control.fullscreen": "पूर्ण स्क्रीन","control.thumbnails": "थंबनेल","control.outlines": "बुकमार्क",
+                "control.presentation": "प्रदर्शन","control.magazine": "पत्रिका",
+                "control.continuous": "निरंतर","control.search": "खोज","control.page": "पृष्ठ","search.search": "खोज",
+                "search.match-case": "मिलान घटना","search.limit-results-1": "सीमा परिणाम 1 प्रति पृष्ठ",
+                "search.limit-results-500": "पहले 500 परिणामों तक सीमित है","search.results-count": " परिणाम",
+                "search.unavailable": "उपलब्ध नहीं खोजें।","search.loading": "लोड हो रहा है"}
+        };
+
+        var lang = (navigator.language || navigator.userLanguage).substr(0, 2);
+        var translations = translationsList[lang] ? translationsList[lang] : false;
+
+        return {
+            getTranslation: function(name) {
+                return translations ? translations[name] : null;
+            },
+
+            updateElements: function() {
+                if (translations) {
+                    document.documentElement.setAttribute("lang", lang);
+                    var i, element;
+                    var titleElements = document.querySelectorAll("[data-lang-title]");
+                    for (i = 0; i < titleElements.length; i++) {
+                        element = titleElements[i];
+                        if (translations[element.dataset.langTitle]) {
+                            element.title = translations[element.dataset.langTitle];
+                        }
+                    }
+                    var textElements = document.querySelectorAll("[data-lang-text]");
+                    for (i = 0; i < textElements.length; i++) {
+                        element = textElements[i];
+                        if (translations[element.dataset.langText]) {
+                            element.innerText = translations[element.dataset.langText];
+                        }
+                    }
+                }
+            }
+        };
+    })();
+
     var Button = {},
         pageLabels = [];
 
@@ -106,18 +179,10 @@
             Button.outlines = d('btnOutlines');
             Button.thumbnails = d('btnThumbnails');
             Button.search = d('btnSearch');
-            d('btnSideToggle').onclick = function () {
-                Sidebar.toggleSidebar();
-            };
-            Button.outlines.onclick = function () {
-                Sidebar.switchToBookmarks();
-            };
-            Button.thumbnails.onclick = function () {
-                Sidebar.switchToThumbnails();
-            };
-            Button.search.onclick = function () {
-                Sidebar.switchToSearch();
-            };
+            d('btnSideToggle').onclick = Sidebar.toggleSidebar;
+            Button.outlines.onclick = Sidebar.switchToBookmarks;
+            Button.thumbnails.onclick = Sidebar.switchToThumbnails;
+            Button.search.onclick = Sidebar.switchToSearch;
 
             thumbnailBar = d('leftContent');
             sidebar = d('left');
@@ -143,6 +208,59 @@
             bookmarkScrollPt = bookmarkPanel.scrollTop;
             searchScrollPt = searchPanel.scrollTop;
             thumbnailBar.scrollTop = thumbnailScrollPt;
+
+            searchInput.value = LanguageHelper.getTranslation("search.loading") || "Loading";
+            searchInput.disabled = "disabled";
+            searchInput.oninput = doSearch;
+            d('cbMatchCase').onclick = doSearch;
+            d('cbLimitResults').onclick = doSearch;
+
+            document.addEventListener('keydown', function(event) {
+                if (event.keyCode == 70 && (event.ctrlKey || event.metaKey)) {
+                    Sidebar.openSidebar();
+                    Sidebar.switchToSearch();
+                    event.preventDefault();
+                }
+            });
+        };
+
+        var doSearch = function() {
+            var resultDiv = document.getElementById('searchResults');
+            resultDiv.innerHTML = "";
+
+            var searchTerm = d('searchInput').value;
+            var matchCase = d('cbMatchCase').checked;
+            var limitOnePerPage = d('cbLimitResults').checked;
+
+            var results = IDRViewer.search(searchTerm, matchCase, limitOnePerPage);
+
+            d('searchResultsCount').innerHTML = String(results.length) + (LanguageHelper.getTranslation("search.results-count") || " results");
+
+            var docFrag = document.createDocumentFragment();
+            for (var i = 0; i < results.length && i < 500; i++) {
+                var pg = results[i].page;
+
+                var link = document.createElement("a");
+                link.href = "?page=" + pg;
+                link.innerHTML = results[i].snippet;
+                link.className = "result";
+                (function(page) {
+                    link.onclick = function() {
+                        IDRViewer.goToPage(page);
+                        return false;
+                    };
+                })(pg);
+
+                docFrag.appendChild(link);
+
+            }
+            if (results.length >= 500) {
+                var element = document.createElement("span");
+                element.innerHTML = LanguageHelper.getTranslation("search.limit-results-500") || "Limited to first 500 results.";
+                element.className = "result";
+                docFrag.appendChild(element);
+            }
+            resultDiv.appendChild(docFrag);
         };
 
         Sidebar.openSidebar = function() {
@@ -224,11 +342,11 @@
                     searchInput.disabled = "";
                     searchInput.focus();
                 } else {
-                    searchInput.value = "Search not available.";
+                    searchInput.value = LanguageHelper.getTranslation("search.unavailable") || "Search not available.";
                 }
             };
             var progressListener = function(percentageLoaded) {
-                searchInput.value = "Loading (" + percentageLoaded + "%)";
+                searchInput.value = (LanguageHelper.getTranslation("search.loading") || "Loading") + " (" + percentageLoaded + "%)";
             };
             if (!isSearchLoaded) {
                 IDRViewer.loadSearch(loadListener, progressListener);
@@ -264,7 +382,7 @@
                 ele.href = "?page=" + page;
                 ele.id = "thumb" + page;
                 ele.onclick = makeThumbnailClickHandler(page);
-                ele.setAttribute('title', 'Page ' + page);
+                ele.setAttribute('title', (LanguageHelper.getTranslation("control.page") || 'Page') + ' ' + page);
                 var margin = Math.floor((heights[page - 1] - 42) / 2);
                 ele.innerHTML = '<div class="spinner" style="margin-top: ' + margin + 'px;"></div>';
                 thumbnailPanel.appendChild(ele);
@@ -440,42 +558,31 @@
         this.blur();
     };
 
-    var setupLayoutSwitching = function (pgCount, layout, availableLayouts, isMobile) {
+    var setupLayoutSwitching = function (pgCount, layout, availableLayouts) {
+        if (availableLayouts.length > 1 && pgCount > 1) {
+            Button.View = document.createElement('select');
+            Button.View.id = 'viewBtn';
 
-        if (!isMobile) {
+            var temp = document.createElement('option');
+            temp.innerHTML = LanguageHelper.getTranslation("control.presentation") || "Presentation";
+            temp.value = IDRViewer.LAYOUT_PRESENTATION;
+            Button.View.appendChild(temp);
 
-            if (availableLayouts.length > 1 && pgCount > 1) {
-                Button.View = document.createElement('select');
-                Button.View.id = 'viewBtn';
-
-                var temp = document.createElement('option');
-                temp.innerHTML = "Presentation";
-                temp.value = IDRViewer.LAYOUT_PRESENTATION;
+            if (availableLayouts.indexOf(IDRViewer.LAYOUT_MAGAZINE) != -1) {
+                temp = document.createElement('option');
+                temp.innerHTML = LanguageHelper.getTranslation("control.magazine") || "Magazine";
+                temp.value = IDRViewer.LAYOUT_MAGAZINE;
                 Button.View.appendChild(temp);
-
-                if (availableLayouts.indexOf(IDRViewer.LAYOUT_MAGAZINE) != -1) {
-                    temp = document.createElement('option');
-                    temp.innerHTML = "Magazine";
-                    temp.value = IDRViewer.LAYOUT_MAGAZINE;
-                    Button.View.appendChild(temp);
-                }
-                if (availableLayouts.indexOf(IDRViewer.LAYOUT_CONTINUOUS) != -1) {
-                    temp = document.createElement('option');
-                    temp.innerHTML = "Continuous";
-                    temp.value = IDRViewer.LAYOUT_CONTINUOUS;
-                    Button.View.appendChild(temp);
-                }
-                Button.View.onchange = handleViewBtn;
-                d('controls-center').appendChild(Button.View);
-                Button.View.value = layout;
             }
-
-        } else {
-            Button.zoom.parentNode.removeChild(Button.zoom);
-            Button.move.parentNode.removeChild(Button.move);
-            Button.select.parentNode.removeChild(Button.select);
-            Button.zoomIn.parentNode.removeChild(Button.zoomIn);
-            Button.zoomOut.parentNode.removeChild(Button.zoomOut);
+            if (availableLayouts.indexOf(IDRViewer.LAYOUT_CONTINUOUS) != -1) {
+                temp = document.createElement('option');
+                temp.innerHTML = LanguageHelper.getTranslation("control.continuous") || "Continuous";
+                temp.value = IDRViewer.LAYOUT_CONTINUOUS;
+                Button.View.appendChild(temp);
+            }
+            Button.View.onchange = handleViewBtn;
+            d('controls-center').appendChild(Button.View);
+            Button.View.value = layout;
         }
     };
 
@@ -495,49 +602,19 @@
         return result;
     }
 
-    var doSearch = function() {
-        var resultDiv = document.getElementById('searchResults');
-        resultDiv.innerHTML = "";
-
-        var searchTerm = d('searchInput').value;
-        var matchCase = d('cbMatchCase').checked;
-        var limitOnePerPage = d('cbLimitResults').checked;
-
-        var results = IDRViewer.search(searchTerm, matchCase, limitOnePerPage);
-
-        d('searchResultsCount').innerHTML = String(results.length) + " results";
-
-        var docFrag = document.createDocumentFragment();
-        for (var i = 0; i < results.length && i < 500; i++) {
-            var pg = results[i].page;
-
-            var link = document.createElement("a");
-            link.href = "?page=" + pg;
-            link.innerHTML = results[i].snippet;
-            link.className = "result";
-            (function(page) {
-                link.onclick = function() {
-                    IDRViewer.goToPage(page);
-                    return false;
-                };
-            })(pg);
-
-            docFrag.appendChild(link);
-
-        }
-        if (results.length >= 500) {
-            var element = document.createElement("span");
-            element.innerHTML = "Limited to first 500 results.";
-            element.className = "result";
-            docFrag.appendChild(element);
-        }
-        resultDiv.appendChild(docFrag);
-    };
+    function swapNavButtonsForR2L() {
+        Button.next.parentNode.insertBefore(Button.prev, Button.next);
+        Button.prev.parentNode.insertBefore(Button.next, Button.prev.parentNode.firstChild);
+        var nextInnerHtml = Button.next.innerHTML;
+        Button.next.innerHTML = Button.prev.innerHTML;
+        Button.prev.innerHTML = nextInnerHtml;
+    }
 
     /**
      * Main setup function that runs on load
      */
     IDRViewer.on('ready', function (data) {
+        LanguageHelper.updateElements();
 
         // Grab buttons
         Button.go = d('goBtn');
@@ -563,18 +640,30 @@
         Button.zoomIn.onclick = function (e) { IDRViewer.zoomIn(); e.preventDefault(); };
         Button.zoomOut.onclick = function (e) { IDRViewer.zoomOut(); e.preventDefault(); };
 
-        document.onkeydown = function(e) {
+        if (data.isR2L) {
+            swapNavButtonsForR2L();
+        }
+
+        document.onkeydown = function (e) {
             switch (e.keyCode) {
                 case 33: // Page Up
-                case 37: // Left Arrow
                     IDRViewer.prev();
                     e.preventDefault();
                     break;
                 case 34: // Page Down
-                case 39: // Right Arrow
                     IDRViewer.next();
                     e.preventDefault();
                     break;
+
+                case 37: // Left Arrow
+                    data.isR2L ? IDRViewer.next() : IDRViewer.prev();
+                    e.preventDefault();
+                    break;
+                case 39: // Right Arrow
+                    data.isR2L ? IDRViewer.prev() : IDRViewer.next();
+                    e.preventDefault();
+                    break;
+
                 case 36: // Home
                     IDRViewer.goToPage(1);
                     e.preventDefault();
@@ -605,7 +694,10 @@
             Button.fullscreen.parentNode.removeChild(Button.fullscreen);
         }
 
-        setupLayoutSwitching(data.pagecount, data.layout, data.availableLayouts, data.isMobile);
+        if (data.isMobile) {
+            ClassHelper.addClass(document.body, "is-mobile");
+        }
+        setupLayoutSwitching(data.pagecount, data.layout, data.availableLayouts);
         Button.zoom.value = IDRViewer.ZOOM_AUTO;
 
         // Add event listeners
@@ -619,21 +711,6 @@
             ClassHelper.removeClass(document.body, "dark-theme");
             ClassHelper.addClass(document.body, themeToggle ? "light-theme" : "dark-theme");
             themeToggle = !themeToggle;
-        });
-
-        var searchInput = d('searchInput');
-        searchInput.value = "Loading";
-        searchInput.disabled = "disabled";
-        searchInput.oninput = doSearch;
-        d('cbMatchCase').onclick = doSearch;
-        d('cbLimitResults').onclick = doSearch;
-
-        document.addEventListener('keydown', function(event) {
-            if (event.keyCode == 70 && (event.ctrlKey || event.metaKey)) {
-                Sidebar.openSidebar();
-                Sidebar.switchToSearch();
-                event.preventDefault();
-            }
         });
 
         (function reticulateSplines() {
@@ -688,6 +765,15 @@
 })();
 </script>
 <style type="text/css">
+    .is-mobile #viewBtn,
+    .is-mobile #zoomBtn,
+    .is-mobile #btnMove,
+    .is-mobile #btnSelect,
+    .is-mobile #btnZoomIn,
+    .is-mobile #btnZoomOut {
+        display: none;
+    }
+
     #left {
         transition-timing-function: ease;
         transition-duration: 200ms;
@@ -971,62 +1057,61 @@
 </style>
 </head>
 <body class="light-theme">
-    <div id="left">
+    <nav id="left">
         <div id="left-controls">
-            <button id="btnThumbnails" title="Thumbnails" class="btn"><i class="fa fa-picture-o fa-lg" aria-hidden="true"></i></button>
-            <button id="btnOutlines" title="Bookmarks" class="btn"><i class="fa fa-list-ul fa-lg" aria-hidden="true"></i></button>
-            <button id="btnSearch" title="Search" class="btn"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+            <button id="btnThumbnails" data-lang-title="control.thumbnails" title="Thumbnails" class="btn"><i class="fa fa-picture-o fa-lg" aria-hidden="true"></i></button>
+            <button id="btnOutlines" data-lang-title="control.outlines" title="Bookmarks" class="btn"><i class="fa fa-list-ul fa-lg" aria-hidden="true"></i></button>
+            <button id="btnSearch" data-lang-title="control.search" title="Search" class="btn"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
         </div>
         <div id="leftContent">
             <div id="thumbnailPanel"></div>
             <div id="outlinePanel"></div>
             <div id="searchPanel">
-                <input id="searchInput" title="Search" type="text">
-                <label class="searchOption"><input type="checkbox" id="cbMatchCase"> Match case</label>
-                <label class="searchOption"><input type="checkbox" id="cbLimitResults"> Limit results 1 per page</label>
+                <input id="searchInput" data-lang-title="search.search" title="Search" type="text">
+                <label class="searchOption"><input type="checkbox" id="cbMatchCase"><span data-lang-text="search.match-case"> Match case</span></label>
+                <label class="searchOption"><input type="checkbox" id="cbLimitResults"><span data-lang-text="search.limit-results-1"> Limit results 1 per page</span></label>
                 <hr>
                 <span id="searchResultsCount"></span>
                 <div id="searchResults"></div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <div id="main">
-        <div id="controls">
+        <nav id="controls">
             <div id="controls-left">
-<button id="btnHome" title="Home" class="btn"><a class="topnav-icons fa fa-home" href="/" style="font-size:28px;color:white;margin-top:-2px;text-decoration:none;"></a></button>
-                
-                <button id="btnSideToggle" title="Sidebar" class="btn"><i class="fa fa-th fa-lg" aria-hidden="true"></i></button>
-                <button id="btnThemeToggle" title="Theme Toggle" class="btn"><i class="fa fa-lightbulb-o fa-lg" aria-hidden="true"></i></button>
+                <button id="btnHome" title="Home" class="btn"><a class="topnav-icons fa fa-home" href="/" style="font-size:28px;color:white;margin-top:-2px;text-decoration:none;"></a></button>
+                <button id="btnSideToggle" data-lang-title="control.sidebar" title="Sidebar" class="btn"><i class="fa fa-th fa-lg" aria-hidden="true"></i></button>
+                <button id="btnThemeToggle" data-lang-title="control.theme-toggle" title="Theme Toggle" class="btn"><i class="fa fa-lightbulb-o fa-lg" aria-hidden="true"></i></button>
             </div>
 
             <div id="controls-center">
-                <button id="btnPrev" title="Previous Page" class="btn"><i class="fa fa-caret-left fa-2x" aria-hidden="true"></i></button>
+                <button id="btnPrev" data-lang-title="control.prev" title="Previous Page" class="btn"><i class="fa fa-caret-left fa-2x" aria-hidden="true"></i></button>
                 <select id="goBtn">
 
                 </select>
                 <span id="pgCount"></span>
-                <button id="btnNext" title="Next Page" class="btn"><i class="fa fa-caret-right fa-2x" aria-hidden="true"></i></button>
+                <button id="btnNext" data-lang-title="control.next" title="Next Page" class="btn"><i class="fa fa-caret-right fa-2x" aria-hidden="true"></i></button>
 
-                <button id="btnSelect" title="Select" class="btn"><i class="fa fa-i-cursor fa-lg" aria-hidden="true"></i></button>
-                <button id="btnMove" title="Pan" class="btn"><i class="fa fa-arrows fa-lg" aria-hidden="true"></i></button>
+                <button id="btnSelect" data-lang-title="control.select" title="Select" class="btn"><i class="fa fa-i-cursor fa-lg" aria-hidden="true"></i></button>
+                <button id="btnMove" title="Pan" data-lang-title="control.move" class="btn"><i class="fa fa-arrows fa-lg" aria-hidden="true"></i></button>
 
-                <button id="btnZoomOut" title="Zoom Out" class="btn"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></button>
+                <button id="btnZoomOut" data-lang-title="control.zoom-out" title="Zoom Out" class="btn"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></button>
                 <select id="zoomBtn">
                     <option value="specific">100%</option>
-                    <option value="actualsize">Actual Size</option>
-                    <option value="fitwidth">Fit Width</option>
-                    <option value="fitheight">Fit Height</option>
-                    <option value="fitpage">Fit Page</option>
-                    <option value="auto">Automatic</option>
+                    <option data-lang-text="control.actual-size" value="actualsize">Actual Size</option>
+                    <option data-lang-text="control.fit-width" value="fitwidth">Fit Width</option>
+                    <option data-lang-text="control.fit-height" value="fitheight">Fit Height</option>
+                    <option data-lang-text="control.fit-page" value="fitpage">Fit Page</option>
+                    <option data-lang-text="control.auto" value="auto">Automatic</option>
 
                 </select>
-                <button id="btnZoomIn" title="Zoom In" class="btn"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></button>
+                <button id="btnZoomIn" data-lang-title="control.zoom-in" title="Zoom In" class="btn"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></button>
             </div>
             <div id="controls-right">
-                <button id="btnFullScreen" title="Fullscreen" class="btn"><i class="fa fa-arrows-alt fa-lg" aria-hidden="true"></i></button>
+                <button id="btnFullScreen" data-lang-title="control.fullscreen" title="Fullscreen" class="btn"><i class="fa fa-arrows-alt fa-lg" aria-hidden="true"></i></button>
             </div>
-        </div>
+        </nav>
 
         <div id="idrviewer">
 

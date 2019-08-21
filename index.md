@@ -14,5 +14,6 @@ introduction: |
   This site contains my talks/ projects related to data science, data analysis, machine learning, general linux hacks and so on. Posts can be viewed from the navigation menu on the left side. 
 
   If you are working on something interesting or just want to say Hello, then I can be reached through email or social media (click the icons above). 
-
+  
+last-updated: Last updated on 2019-08-21
 ---

@@ -1,4 +1,4 @@
-/* v1.2.0 */
+/* v1.3.0 */
 (function() {
     "use strict";
 
@@ -16,18 +16,27 @@
     };
 
     var layout;
+    var continuousTimeout;
+    var CONTINUOUS_THRESHOLD = 1000; // Length of time (in millis) required on page required to be considered a pageview in continuous layout
     var handlePageChange = function(data) {
         if (history.pushState) {
             if (layout === IDRViewer.LAYOUT_CONTINUOUS) {
-                try {
-                    history.replaceState({page: data.page}, null, '?page=' + data.page);
-                } catch (ignore) { } // Chrome throws error on file:// protocol
+                if (continuousTimeout) {
+                    clearTimeout(continuousTimeout);
+                }
+                continuousTimeout = setTimeout(function() {
+                    addPageToHistory(data.page);
+                }, CONTINUOUS_THRESHOLD);
             } else {
-                try {
-                    history.pushState({page: data.page}, null, '?page=' + data.page);
-                } catch (ignore) { } // Chrome throws error on file:// protocol
+                addPageToHistory(data.page);
             }
         }
+    };
+
+    var addPageToHistory = function(page) {
+        try {
+            history.pushState({page: page}, null, '?page=' + page);
+        } catch (ignore) { } // Chrome throws error on file:// protocol
     };
 
     var pg = parseInt(getURLParamValue('page'));
