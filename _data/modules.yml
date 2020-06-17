@@ -1,3 +1,5 @@
+ - name: CodeAlong Saturdays
+   slug: codealong
  - name: Data Analysis
    slug: data-analysis
    status:
