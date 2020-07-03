@@ -14,5 +14,5 @@ introduction: |
 ## Problem Statement
 - [Visualize 2009 Indian Lok Sabha Elections Data](visualize-2009-elections)
 - [Data Exploration of Automobile Data](data-exploration-cars)
-
+- [Email Classification - Spam or Ham using logistic regression](classify-email-spam-not-spam)
 
