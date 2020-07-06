@@ -2,6 +2,12 @@
 <html>
 
 	<head>
+        <!-- to support Open Graph Protocol (OGP) --> 
+        <meta property='og:title' content="{{ page.title }}"/>
+        <meta property='og:image' content="{{ site.hosturl }}{{ page.url | replace: '.html', '-logo.png' }}"/>
+        <meta property='og:description' content='{{ page.introduction }}'/>
+        <meta property='og:url' content="{{ site.hosturl }}{{ page.url }}" />
+
         <script>
         function toggleDiv(id) {
             var div = document.getElementById(id);
