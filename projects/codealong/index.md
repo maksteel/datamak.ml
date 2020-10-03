@@ -17,4 +17,4 @@ introduction: |
 - [Email Classification - Spam or Ham using logistic regression](classify-email-spam-not-spam)
 - [San Fransisco salaries data analysis and visualisation](sf-salaries)
 - [Daily Power Generation data analysis and visualisation](daily-power-generation)
-
+- [Video Game Sales data analysis and visualisation](video-game-sales)
