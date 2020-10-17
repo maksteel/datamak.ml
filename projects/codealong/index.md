@@ -18,3 +18,4 @@ introduction: |
 - [San Fransisco salaries data analysis and visualisation](sf-salaries)
 - [Daily Power Generation data analysis and visualisation](daily-power-generation)
 - [Video Game Sales data analysis and visualisation](video-game-sales)
+- [Indian Rainfall data analysis and visualisation](indian-rainfall)
