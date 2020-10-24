@@ -19,3 +19,4 @@ introduction: |
 - [Daily Power Generation data analysis and visualisation](daily-power-generation)
 - [Video Game Sales data analysis and visualisation](video-game-sales)
 - [Indian Rainfall data analysis and visualisation](indian-rainfall)
+- [Vehicle Insurance Crossell using logistic regression](vehicle-insurance-crosssell)
