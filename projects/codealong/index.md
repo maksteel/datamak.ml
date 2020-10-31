@@ -20,3 +20,4 @@ introduction: |
 - [Video Game Sales data analysis and visualisation](video-game-sales)
 - [Indian Rainfall data analysis and visualisation](indian-rainfall)
 - [Vehicle Insurance Crossell using logistic regression](vehicle-insurance-crosssell)
+- [Indian Startup data visualisation](indian-startup-data)

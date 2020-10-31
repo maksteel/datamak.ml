@@ -1,15 +1,16 @@
 name: datamak.ml
 channels:
   - defaults
-  - conda-forge
+  #- conda-forge
+  - msys2
 dependencies:
   - python
   - pip
-  - clangxx_osx-64
-  - ruby
-  
-  - rb-jekyll
-  - rb-bundler
-  - rb-rb-inotify>0.9
+  #- clangxx_osx-64
+  #- ruby
+  #- rb-jekyll
+  #- rb-bundler
+  #- rb-rb-inotify>0.9
+  - m2w64-gcc
 
   
