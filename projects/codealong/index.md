@@ -21,3 +21,4 @@ introduction: |
 - [Indian Rainfall data analysis and visualisation](indian-rainfall)
 - [Vehicle Insurance Crossell using logistic regression](vehicle-insurance-crosssell)
 - [Indian Startup data visualisation](indian-startup-data)
+- [Customer Segmentation with RFM](customer-segmentation-with-RFM)
