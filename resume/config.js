@@ -1,1 +1,1 @@
-IDRViewer.config = {"pagecount":2,"title":"","author":"","fileName":"Resume-Manish-Kukreja.pdf","bounds":[[909,1286],[909,1286]],"bookmarks":[],"thumbnailType":"jpg","pageType":"html","pageLabels":[]};
+IDRViewer.config = {"pagecount":2,"title":"","author":"","subject":"","keywords":"","creator":"TeX","producer":"pdfTeX-1.40.17","creationdate":"D:20210119220535Z","moddate":"D:20210119220535Z","trapped":"False","fileName":"manish-kukreja-resume.pdf","bounds":[[909,1286],[909,1286]],"bookmarks":[],"thumbnailType":"jpg","pageType":"html","pageLabels":[]};
