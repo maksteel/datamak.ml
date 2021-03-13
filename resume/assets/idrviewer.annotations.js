@@ -1,4 +1,4 @@
-/* v1.1.0 */
+/* v1.1.1 */
 (function() {
     "use strict";
 
@@ -33,7 +33,6 @@
 
         var initPage = function(page) {
             var pageContainer = document.getElementById("page" + page);
-            pageContainer.children[0].style.position = "absolute";
 
             var annotationsContainer = document.createElement("div");
             annotationsContainer.className = "page-inner";
