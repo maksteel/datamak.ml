@@ -22,3 +22,4 @@ introduction: |
 - [Vehicle Insurance Crossell using logistic regression](vehicle-insurance-crosssell)
 - [Indian Startup data visualisation](indian-startup-data)
 - [Customer Segmentation with RFM](customer-segmentation-with-RFM)
+- [Facebook Campaign Analysis](fb-campaign)
