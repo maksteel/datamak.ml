@@ -24,4 +24,4 @@ introduction: |
 - [Customer Segmentation with RFM](customer-segmentation-with-RFM)
 - [Facebook Campaign Analysis](fb-campaign)
 - [IPL data analysis](ipl-data)
-- [Data Cleaning using WHO's obesity data](data_clearning_with_obesity_data)
+- [Data Cleaning using WHO's obesity data](data-cleaning-with-obesity-data)
